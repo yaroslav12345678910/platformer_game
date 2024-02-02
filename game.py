@@ -9,7 +9,7 @@ clock = pygame.time.Clock()
 
 player_icon = pygame.image.load("player.png")
 player_x = 650
-player_y = 500
+player_y = 450
 
 platform_icon = pygame.image.load("platform.png")
 list_platforms = [
@@ -33,8 +33,8 @@ jumpCount = 10
 flag_space = True
 running = True
 flag_meteor = False
-meteor_spawn_flag = True
-
+count = 0
+score = 0
 
 def kill_meteor():
     sc.blit(platform_icon, (platform_x, platform_y))
@@ -42,17 +42,26 @@ def kill_meteor():
     pygame.display.update()
 
 
-
 while running:
-    meteor_y += gravity
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
+    player_rect = player_icon.get_rect(topleft=(player_x, player_y))
+    meteor_rect = meteor_icon.get_rect(topleft=(meteor_x, meteor_y))
+
+    if player_rect.colliderect(meteor_rect):
+        score += 10
+        print(score)
+
+
+
+    meteor_y += gravity
     if meteor_y >= 563:
-        flag_meteor = True
-        meteor_spawn_flag = True
         kill_meteor()
+        count -= 1
+        meteor_y = 0
 
     sc.blit(background_image, (0, 0))
     keys = pygame.key.get_pressed()
@@ -76,12 +85,13 @@ while running:
     elif player_x > width - player_icon.get_width():
         player_x = width - player_icon.get_width()
 
+    if count == 0:
+        count += 1
+        pos_meteor_for_x = random.randint(0, 1100)
+
     sc.blit(platform_icon, (platform_x, platform_y))
     sc.blit(player_icon, (player_x, player_y))
-    if not flag_meteor:
-        if meteor_spawn_flag:
-            sc.blit(meteor_icon, (random.randint(0, 1100), meteor_y))
-            meteor_spawn_flag = False
+    sc.blit(meteor_icon, (pos_meteor_for_x, meteor_y))
 
     pygame.display.update()
     clock.tick(FPS)
