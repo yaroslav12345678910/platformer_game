@@ -1,6 +1,15 @@
 import pygame
 import random
 
+
+class Player:
+    pass
+
+
+class Meteor:
+    pass
+
+
 pygame.init()
 size = width, height = 1200, 675
 sc = pygame.display.set_mode(size)
@@ -36,10 +45,16 @@ flag_meteor = False
 count = 0
 score = 0
 
+
 def kill_meteor():
     sc.blit(platform_icon, (platform_x, platform_y))
     sc.blit(player_icon, (player_x, player_y))
     pygame.display.update()
+
+# TODO: пересмотри уроки создания игры:
+#   1) создание классов игровых объектов: герой, метеор
+#   2) сделай блок инициализации, где ты создаешь все объекты и координаты
+#   3) важно - метеоры нужно создавать как список метеоров, их же может быть много!
 
 
 while running:
@@ -51,11 +66,10 @@ while running:
     player_rect = player_icon.get_rect(topleft=(player_x, player_y))
     meteor_rect = meteor_icon.get_rect(topleft=(meteor_x, meteor_y))
 
+    #
     if player_rect.colliderect(meteor_rect):
         score += 10
         print(score)
-
-
 
     meteor_y += gravity
     if meteor_y >= 563:
