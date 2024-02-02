@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 size = width, height = 1200, 675
@@ -32,11 +33,15 @@ jumpCount = 10
 flag_space = True
 running = True
 flag_meteor = False
+meteor_spawn_flag = True
+
 
 def kill_meteor():
     sc.blit(platform_icon, (platform_x, platform_y))
     sc.blit(player_icon, (player_x, player_y))
     pygame.display.update()
+
+
 
 while running:
     meteor_y += gravity
@@ -46,6 +51,7 @@ while running:
 
     if meteor_y >= 563:
         flag_meteor = True
+        meteor_spawn_flag = True
         kill_meteor()
 
     sc.blit(background_image, (0, 0))
@@ -73,9 +79,9 @@ while running:
     sc.blit(platform_icon, (platform_x, platform_y))
     sc.blit(player_icon, (player_x, player_y))
     if not flag_meteor:
-        meteor_y = 0
-        sc.blit(meteor_icon, (meteor_x, meteor_y))
-        flag_meteor = False
+        if meteor_spawn_flag:
+            sc.blit(meteor_icon, (random.randint(0, 1100), meteor_y))
+            meteor_spawn_flag = False
 
     pygame.display.update()
     clock.tick(FPS)
