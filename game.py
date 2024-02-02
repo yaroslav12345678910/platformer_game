@@ -17,6 +17,11 @@ list_platforms = [
 platform_x = 200
 platform_y = 375
 
+meteor_icon = pygame.image.load("meteor.png")
+meteor_x = 500
+meteor_y = 0
+
+gravity = 5
 speed = 13
 BLACK = (0, 0, 0)
 
@@ -26,14 +31,22 @@ isJump = False
 jumpCount = 10
 flag_space = True
 running = True
+flag_meteor = False
+
+def kill_meteor():
+    sc.blit(platform_icon, (platform_x, platform_y))
+    sc.blit(player_icon, (player_x, player_y))
+    pygame.display.update()
 
 while running:
-
+    meteor_y += gravity
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    if player_icon.get_rect().collidelist(list_platforms):
-        print('yes')
+
+    if meteor_y >= 563:
+        flag_meteor = True
+        kill_meteor()
 
     sc.blit(background_image, (0, 0))
     keys = pygame.key.get_pressed()
@@ -44,6 +57,7 @@ while running:
     if not isJump:
         if keys[pygame.K_SPACE]:
             isJump = True
+
     else:
         if jumpCount >= -10:
             player_y -= (jumpCount * abs(jumpCount)) * 0.7
@@ -58,6 +72,11 @@ while running:
 
     sc.blit(platform_icon, (platform_x, platform_y))
     sc.blit(player_icon, (player_x, player_y))
+    if not flag_meteor:
+        meteor_y = 0
+        sc.blit(meteor_icon, (meteor_x, meteor_y))
+        flag_meteor = False
+
     pygame.display.update()
     clock.tick(FPS)
 pygame.quit()
